@@ -88,7 +88,7 @@ endef
 define KernelPackage/qca-nss-ecm-standard
   $(call KernelPackage/qca-nss-ecm/Default)
   DEPENDS+=+iptables-nft +iptables-mod-physdev
-ifneq ($(CONFIG_PACKAGE_kmod-pppol2tp),)
+ifeq ($(CONFIG_PACKAGE_kmod-pppol2tp),y)
   DEPENDS+=+PACKAGE_kmod-pppol2tp:kmod-pppol2tp
 endif
 ifneq ($(CONFIG_PACKAGE_kmod-qca-mcs),)
@@ -232,7 +232,7 @@ ECM_MAKE_OPTS+=ECM_INTERFACE_OVS_BRIDGE_ENABLE=n \
 		ECM_CLASSIFIER_OVS_ENABLE=n
 endif
 
-ifneq ($(CONFIG_PACKAGE_kmod-macvlan),)
+ifeq ($(CONFIG_PACKAGE_kmod-macvlan),y)
 ECM_MAKE_OPTS+=ECM_INTERFACE_MACVLAN_ENABLE=y
 else
 ECM_MAKE_OPTS+=ECM_INTERFACE_MACVLAN_ENABLE=n
@@ -244,7 +244,7 @@ else
 ECM_MAKE_OPTS+=ECM_MULTICAST_ENABLE=n
 endif
 
-ifneq ($(CONFIG_PACKAGE_kmod-ipsec),)
+ifeq ($(CONFIG_PACKAGE_kmod-ipsec),y)
 ECM_MAKE_OPTS+=ECM_INTERFACE_IPSEC_ENABLE=y
 else
 ECM_MAKE_OPTS+=ECM_INTERFACE_IPSEC_ENABLE=n
@@ -260,7 +260,7 @@ ECM_MAKE_OPTS+= ECM_INTERFACE_PPPOE_ENABLE=n \
 		ECM_INTERFACE_PPP_ENABLE=n
 endif
 
-ifneq ($(CONFIG_PACKAGE_kmod-pppol2tp),)
+ifeq ($(CONFIG_PACKAGE_kmod-pppol2tp),y)
 ECM_MAKE_OPTS+=ECM_INTERFACE_L2TPV2_ENABLE=y
 else
 ECM_MAKE_OPTS+=ECM_INTERFACE_L2TPV2_ENABLE=n
@@ -274,7 +274,7 @@ ECM_MAKE_OPTS+=ECM_INTERFACE_GRE_TAP_ENABLE=n \
 		ECM_INTERFACE_GRE_TUN_ENABLE=n
 endif
 
-ifneq ($(CONFIG_PACKAGE_kmod-sit),)
+ifeq ($(CONFIG_PACKAGE_kmod-sit),y)
 ECM_MAKE_OPTS+=ECM_INTERFACE_SIT_ENABLE=y
 else
 ECM_MAKE_OPTS+=ECM_INTERFACE_SIT_ENABLE=n
