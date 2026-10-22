@@ -55,7 +55,7 @@ load_sfe() {
 load_ecm() {
 	[ -d /sys/module/ecm ] || {
 		insmod ecm front_end_selection=$(get_front_end_mode)
-        echo 1 > /sys/kernel/debug/ecm/ecm_classifier_default/accel_delay_pkts
+        echo 24 > /sys/kernel/debug/ecm/ecm_classifier_default/accel_delay_pkts
 	}
 
 	support_bridge && {
