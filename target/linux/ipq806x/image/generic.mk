@@ -273,9 +273,10 @@ define Device/nec_wg2600hp
 	DEVICE_MODEL := Aterm WG2600HP
 	SOC := qcom-ipq8064
 	BLOCKSIZE := 64k
+	IMAGE_SIZE := 24192k
 	BOARD_NAME := wg2600hp
 	IMAGE/sysupgrade.bin := append-kernel | append-rootfs | \
-		pad-rootfs | append-metadata
+		pad-rootfs | check-size | append-metadata
 	DEVICE_PACKAGES := ath10k-firmware-qca99x0-ct
 endef
 TARGET_DEVICES += nec_wg2600hp
