@@ -87,6 +87,7 @@ endef
 
 define KernelPackage/qca-nss-ecm-standard
   $(call KernelPackage/qca-nss-ecm/Default)
+  DEPENDS+=+iptables-nft +iptables-mod-physdev
 ifneq ($(CONFIG_PACKAGE_kmod-pppol2tp),)
   DEPENDS+=+PACKAGE_kmod-pppol2tp:kmod-pppol2tp
 endif
@@ -102,6 +103,7 @@ endef
 
 define KernelPackage/qca-nss-ecm-standard/install
 $(call KernelPackage/qca-nss-ecm/Default/install, $(1))
+	sed -i '1c\#!/bin/sh /etc/rc.common' $(1)/etc/init.d/qca-nss-ecm
 endef
 
 # Variant with additional features enabled for premium profile

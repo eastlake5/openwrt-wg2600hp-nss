@@ -5,8 +5,7 @@ uci -q batch << EOF
 	set firewall.nss_ecm=include
 	set firewall.nss_ecm.type=script
 	set firewall.nss_ecm.path=/etc/firewall.d/qca-nss-ecm
-	set firewall.nss_ecm.family=any
-	set firewall.nss_ecm.reload=1
+	set firewall.nss_ecm.fw4_compatible=1
 	commit firewall
 EOF
 

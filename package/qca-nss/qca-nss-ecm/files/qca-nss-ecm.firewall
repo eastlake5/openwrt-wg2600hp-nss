@@ -16,6 +16,11 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
+# Ensure ECM is loaded even if firewall starts before its boot service.
+/etc/init.d/qca-nss-ecm start
+# Re-evaluate accelerated connections after firewall rules are reloaded.
+/lib/netifd/offload/on-demand-down
+
 iptables -nvL FORWARD | grep -q "physdev" && iptables -Z FORWARD 1
 iptables -nvL FORWARD | grep -q "physdev" || iptables -I FORWARD -m physdev --physdev-is-bridged -j ACCEPT
 
