@@ -1,0 +1,34 @@
+From: Ken Zhu <guigenz@codeaurora.org>
+Date: Fri, 23 Jul 2021 09:32:15 -0700
+Subject: [PATCH] qca-nss-clients: fix out of memory issue
+
+rtable is not release if it was not set skb_dst
+
+Backport of commit ec7a57bed8914adcbd5bf95de1f0b630296489c1 from the
+NHSS.QSDK.11.4 branch of https://git.codelinaro.org/clo/qsdk/oss/lklm/nss-clients
+(the 11.4 source c4049d1 used here comes from caf_migration/11.4.0.5.r3,
+which does not have it).
+
+nss_tunipip6_encap_exception() looks up an IPv4 route for every exception
+packet; when the route does not point to the tunnel, the packet is passed
+to netif_receive_skb() without ip_rt_put(), leaking one dst reference per
+packet.  On a DS-Lite gateway the leaked dsts can never be freed once the
+route cache entry is replaced, so ip_dst_cache (SUnreclaim) grows without
+bound.
+
+Change-Id: I6be6332f7b71a7c7a55d6082f055bd6828076be1
+Signed-off-by: Ken Zhu <guigenz@codeaurora.org>
+---
+ tunipip6/nss_connmgr_tunipip6.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/tunipip6/nss_connmgr_tunipip6.c
++++ b/tunipip6/nss_connmgr_tunipip6.c
+@@ -198,6 +198,7 @@ static void nss_tunipip6_encap_exception
+ 		skb->pkt_type = PACKET_HOST;
+ 		skb->skb_iif = dev->ifindex;
+ 		skb->ip_summed = CHECKSUM_NONE;
++		ip_rt_put(rt);
+ 		netif_receive_skb(skb);
+ 		return;
+ 	}
